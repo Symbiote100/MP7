@@ -1,4 +1,5 @@
 package edu.illinois.cs.cs125.mp7;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.app.Activity;
@@ -14,11 +15,24 @@ import android.view.View;
 
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     AlarmManager alarmManager;
     private TimePicker alarmTimePicker;
     private PendingIntent pendingIntent;
+    private static MainActivity instance;
+    private TextView alarmTextView;
+    Calendar calendar;
+
+    public static MainActivity instance() {
+        return instance;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        instance = this;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +48,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void onToggleClicked(View view) {
+    public void OnToggleClicked(View view) {
         long time;
         if (((ToggleButton) view).isChecked()) {
-            Toast.makeText(MainActivity.this, "Alarm is on", Toast.LENGTH_LONG);
+            Toast.makeText(MainActivity.this, "Alarm is on", Toast.LENGTH_LONG).show();
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getCurrentHour());
             calendar.set(Calendar.MINUTE, alarmTimePicker.getCurrentMinute());
             Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
             pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
 
+
+
+             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 60000, pendingIntent);
+
+            /**
             time = calendar.getTimeInMillis() - (calendar.getTimeInMillis() % 60000);
 
             if (System.currentTimeMillis() > time) {
@@ -52,15 +71,18 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     time = time + (24 * 60 * 60 * 1000);
                 }
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 10000, pendingIntent);
+
+                alarmManager.set(AlarmManager.RTC, time, pendingIntent);
+             */
+
             } else {
                 alarmManager.cancel(pendingIntent);
-                Toast.makeText(MainActivity.this, "Alarm is off", Toast.LENGTH_LONG);
+                Toast.makeText(MainActivity.this, "Alarm is off", Toast.LENGTH_LONG).show();
             }
 
         }
 
+
     }
 
 
-}
