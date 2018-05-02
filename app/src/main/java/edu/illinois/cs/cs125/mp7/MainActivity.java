@@ -1,6 +1,5 @@
 package edu.illinois.cs.cs125.mp7;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -13,7 +12,6 @@ import java.util.Calendar;
 
 import android.view.View;
 
-import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -21,7 +19,6 @@ public class MainActivity extends Activity {
     private TimePicker alarmTimePicker;
     private PendingIntent pendingIntent;
     private static MainActivity instance;
-    private TextView alarmTextView;
     Calendar calendar;
 
     public static MainActivity instance() {
@@ -41,7 +38,7 @@ public class MainActivity extends Activity {
         //Load the main layout for our activity
         setContentView(R.layout.activity_main);
 
-        alarmTimePicker = (TimePicker) findViewById(R.id.alarmTimePicker);
+        alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
         ToggleButton alarmToggle = (ToggleButton) findViewById(R.id.alarmToggle);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
@@ -49,7 +46,6 @@ public class MainActivity extends Activity {
     }
 
     public void OnToggleClicked(View view) {
-        long time;
         if (((ToggleButton) view).isChecked()) {
             Toast.makeText(MainActivity.this, "Alarm is on", Toast.LENGTH_LONG).show();
             Calendar calendar = Calendar.getInstance();
@@ -67,9 +63,9 @@ public class MainActivity extends Activity {
 
             if (System.currentTimeMillis() > time) {
                 if (calendar.AM_PM == 0) {
-                    time = time + (12 * 60 * 60 * 1000);
+                    time += (12 * 60 * 60 * 1000);
                 } else {
-                    time = time + (24 * 60 * 60 * 1000);
+                    time += (24 * 60 * 60 * 1000);
                 }
 
                 alarmManager.set(AlarmManager.RTC, time, pendingIntent);

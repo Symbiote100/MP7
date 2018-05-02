@@ -23,7 +23,7 @@ public class AlarmService extends IntentService {
     private void sendNotification(String message) {
         alarmNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+        PendingIntent intent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), 0);
 
         NotificationCompat.Builder alarmNotificationBuilder = new NotificationCompat.Builder(
@@ -32,7 +32,7 @@ public class AlarmService extends IntentService {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setContentText(message);
 
-        alarmNotificationBuilder.setContentIntent(contentIntent);
+        alarmNotificationBuilder.setContentIntent(intent);
         alarmNotificationManager.notify(1, alarmNotificationBuilder.build());
     }
 }
